@@ -7,6 +7,10 @@ public class BattleDroid implements Droid {
     private int mpLevel = 100;
     private int dmgLevel;
 
+    public  BattleDroid(){
+
+    }
+
     public BattleDroid(String name){
         this.name = name;
     }

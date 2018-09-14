@@ -8,12 +8,35 @@ public class Fight implements Runnable {
     private Thread t;
     private BattleDroid droidOne;
     private BattleDroid droidTwo;
+    private BattleDroid action;
     private int choice;
 
     public Fight(String firstDroidName, String secondDroidName) {
 
         this.droidOne = new BattleDroid(firstDroidName);
         this.droidTwo = new BattleDroid(secondDroidName);
+        this.action = new BattleDroid();
+    }
+
+
+    public void switchMode(BattleDroid droidOne, BattleDroid droidTwo){
+        switch (choice) {
+
+            case 1:
+                this.action.laserAttack(droidOne, droidTwo);
+                break;
+            case 2:
+                this.action.Repair(droidOne);
+                break;
+            case 3:
+                this.action.Charging(droidOne);
+                break;
+            case 4:
+                this.action.Strike((int) (Math.random() * 10), droidTwo);
+                break;
+            default: run();
+
+        }
     }
 
     public void run() {
@@ -46,9 +69,10 @@ public class Fight implements Runnable {
             System.out.println("Current HP of: " + droidTwo.getName() + " " + droidTwo.getHpLevel());
 
             while (droidOne.getHpLevel() > 0 && droidTwo.getHpLevel() > 0) {
-                System.out.println();
+               // System.out.println();
 
                 if (isUnderControl == true) {
+                    System.out.println();
                     System.out.println(droidOne.getName() + " turn ");
                     System.out.println("Enter '1' for Laser Shot (Cost: 50 MP).     Enter '2' for Repair (Cost: 30 MP).      Enter '3' for Charging MP.      Enter '4' for Attack.");
                     Scanner scanInt = new Scanner(System.in);
@@ -57,56 +81,25 @@ public class Fight implements Runnable {
                     } catch (InputMismatchException e) {
                         System.out.println("Exception thrown  :" + e);
                     }
+                    switchMode(droidOne, droidTwo);
 
 
-                    switch (choice) {
-
-                        case 1:
-                            droidOne.laserAttack(droidOne, droidTwo);
-                            break;
-                        case 2:
-                            droidOne.Repair(droidOne);
-                            break;
-                        case 3:
-                            droidOne.Charging(droidOne);
-                            break;
-                        case 4:
-                            droidOne.Strike((int) (Math.random() * 10), droidTwo);
-                            break;
-                        default: run();
-
-                    }
-
-
-
-
-                System.out.println();
                 if(Multiplayer == true) {
-                    System.out.println(droidTwo.getName()+ " turn " + "Enter '1' for Laser Shot (Cost: 50 MP).     Enter '2' for Repair (Cost: 30 MP).      Enter '3' for Charging MP.      Enter '4' for Attack.");
-                     scanInt = new Scanner(System.in);
+                    System.out.println();
+                    System.out.println(droidTwo.getName() + " turn ");
+                    System.out.println("Enter '1' for Laser Shot (Cost: 50 MP).     Enter '2' for Repair (Cost: 30 MP).      Enter '3' for Charging MP.      Enter '4' for Attack.");
+                    scanInt = new Scanner(System.in);
                     try {
-                    choice = scanInt.nextInt();
+                        choice = scanInt.nextInt();
                     } catch (InputMismatchException e) {
                         System.out.println("Exception thrown  :" + e);
                     }
-                    switch (choice) {
-                        case 1: droidTwo.laserAttack(droidTwo, droidOne);
-                            break;
-                        case 2: droidTwo.Repair(droidTwo);
-                            break;
-                        case 3: droidTwo.Charging(droidTwo);
-                            break;
-                        case 4: droidTwo.Strike( (int) (Math.random() * 10), droidOne);
-                            break;
-                            default:return;
+                    switchMode(droidTwo, droidOne);
 
                     }
                 }
 
 
-
-
-                }
                     if (Multiplayer == false) {
                         droidTwo.Strike((int) (Math.random() * 10), droidOne);
                     }
